@@ -1,7 +1,7 @@
 /**
- * lineFollowing2.ino
+ * motion2.ino
  * Group 6: Zihan Zhao, Bertrand Juan, Marco Chen
- * Behavior: Make robot complete line following task B. 
+ * Behavior: Make robot turn counterclockwise 90 degrees, stop 2 seconds, turn clockwise 90 degrees, stop 2 seconds. Repeat this 3 times.
  */
 
 #include <rcc.h>
@@ -13,7 +13,7 @@ int led = 13;
 int leftIRSensor1 = A1, leftIRSensor2 = 2, rightIRSensor1 = 11, rightIRSensor2 = 12, middleIRSensor = A0;
 int in1 = 5, in2 = 6, in3 = 7, in4 = 8;
 int enA = 9, enB = 10;
-int leftEncA = 3, leftEncB = 4, rightEncA = 2, rightEncB = 12; //These are opposite from in the rcc library because of different motor orientations
+int leftEncA = 3, leftEncB = 4, rightEncA = 2, rightEncB = 12; //These are opposite from in the rcc library because of different motor orientations (Will be explained in write-up)
 Right_Dir_Odom rodom;
 Left_Dir_Odom lodom;
 
@@ -44,22 +44,18 @@ void setup() {
 }
 
 void loop() {
-  //get left and right encoder data (not used for any logic in lineFollowing2)
+  //get left and right encoder data
   int lcount = lodom.getCount();
   int rcount = rodom.getCount();
 
-  //initialize driving as 1
-  int driving = 1;
-
-  /**
-   * While the robot is driving, make it do the following:
-   * Update sensors and run the logic in sensorDrive()
-  */
-  
-  while (driving) {
-    updateIR(); //updates necessary sensors
-    driving = sensorDrive(); //performs driving logic, and returns 0 if the end of the course is reached
+  // robot turns 90 degrees counterclockwise, stops 2 seconds, turns 90 degrees clockwise, stops 2 seconds, and repeats this a total of 3 times.
+  for (int i = 0; i < 3; i++)
+  {
+    turnAngle(-90.0); //turn 90 degrees counterclockwise
+    delay(2000); //stop 2 seconds
+    turnAngle(90.0); //turn 90 degrees clockwise
+    delay(2000); //stop 2 seconds
   }
-
-  finishProcedure(); //lights up the finish LED as a visual indicator of stopping
+  
+  finishProcedure(); //light up the finish LED as a visual indicator of stopping
 }

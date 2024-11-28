@@ -57,52 +57,70 @@ void turn(int turn_spd) {
 }
 
 /*
- * 
+ * Makes robot drive with logic that depends on the values of the IR sensors
  */
 int sensorDrive() {
-    int totalValue = 0;
+    int totalValue = 0; //initialize totalValue as 0 upon function call
+
+    /**
+    Note: totalValue is a value that tells us how far off the track the robot is
+    The greater the magnitude of totalValue, the more "off-course" the robot is
+    If totalValue is negative, the robot has to prioritize turning left to stay on the line
+    If totalValue is positive, the robot has to prioritize turning right to stay on the line
+    **/
     
-    // Conditionals to change turn
+<<<<<<< HEAD
+    /*
+	By using 5 IR sensors, we have a brief understanding of how "off track" our robot is.
+	Using that information, we create different "Levels" of turning to steer the robot back on track.
+	With negatives indicating a left turn and positives indicating a right turn, we can assign values
+	that relates proportionally to how much force we should use into correcting the path of our robot.
+	*/
     if (irData.l2Value) {
+=======
+    //change the value of totalValue based on reading of the IR sensors
+    if (irData.l2Value) { //if the leftmost sensor detects the line, drastically lower totalValue
+>>>>>>> 9e9c5dde9d67e54c3aa6d2d31c7e414156bedc73
         totalValue += -2;
     }
-    if (irData.l1Value) {
+    if (irData.l1Value) { //if the first sensor to the left detects the line, slightly lower totalValue
         totalValue += -1;
     }
     if (irData.mValue) {
-        totalValue += 0;
+        totalValue += 0; //if the middle center detects the line, don't change totalValue
     }
-    if (irData.r1Value) {
+    if (irData.r1Value) { //if the first sensor to the right detects the line, slightly increase totalValue
         totalValue += 1;
     }
-    if (irData.r2Value) {
+    if (irData.r2Value) { //if the rightmost sensor detects the ine, drastically increase totalValue
       totalValue += 2;  
     }
 
-    // Drive based on conditionals
+    // Returns 0 & robot stops when all five sensors hit white -> off the course completely or reached the end
     if (irData.mValue == 0 && irData.r1Value == 0 && irData.l1Value == 0 && irData.l2Value == 0 && irData.r2Value == 0) {
         drive(0);
         turn(0);  
         return 0;
     }
     
-
+	// Define different "correctional" movements depending on our "off track status".
+    // if totalValue is 0, then just drive forward. No turn needs to be made.
     if (totalValue == 0) {
         drive(180);
-    } else if (totalValue == -1) {
+    } else if (totalValue == -1) { //if totalValue is negative 1, make a small left
         drive(50);
         analogWrite(enA, 20);
         analogWrite(enB, 160);
-    } else if (totalValue <= -2) {
+    } else if (totalValue <= -2) { //if totalValue is <= negative 2, make a large left
         digitalWrite(in2, HIGH);
         digitalWrite(in4, HIGH);
         analogWrite(enA, 100);
         analogWrite(enB, 250);
-    } else if (totalValue == 1) {
+    } else if (totalValue == 1) { //if totalValue is 1, make a small right
         drive(50);
         analogWrite(enB, 20);
         analogWrite(enA, 160);
-    } else if (totalValue >= 2) {
+    } else if (totalValue >= 2) { //if totalValue >= 2, make a large right
         digitalWrite(in1, HIGH);
         digitalWrite(in3, HIGH);;
         analogWrite(enB, 100);
@@ -117,8 +135,11 @@ void moveDistance(float meters) {
     int encoderCountPerRotation = 1920;
     int dir = (meters < 0 ? -1 : 1);
     int currEncoderCount = lodom.getCount();
+
+	// Formula to transform linear distance into encoder counts
     int targetEncoderCount = currEncoderCount + dir * (encoderCountPerRotation * (1000 / (80 * PI)));
-    if (meters > 0){
+    
+	if (meters > 0){ // Specify how currEncoerCount should compare to targetEncoderCount depending on direction
       digitalWrite(in1, HIGH);
       digitalWrite(in2, LOW);
       digitalWrite(in3, LOW);
@@ -140,18 +161,20 @@ void moveDistance(float meters) {
       }
       
     }
-   drive(0);
-   turn(0);
+
+	// Reset drive and turn (Stop all movements)
+   	drive(0);
+   	turn(0);
 }
 
 void turnAngle(float deg) {
     // Robot measurements
-    float wheelDiameter = 0.08;  // 80mm in meters
-    float wheelbase = 0.15;      // Distance between wheel centers in meters
-    int encoderCountsPerRotation = 1920;
-    float turnCircumference = wheelbase * PI;
+    float wheelDiameter = 0.08;  // 80mm in meters (not used in turnAngle calculation)
+    float wheelbase = 0.15;      // Distance between wheel centers in meters (not used in turnAngle calculation)
+    int encoderCountsPerRotation = 1920; // 1920 encoder ticks per full rotation
+    float turnCircumference = wheelbase * PI; // Circumference between two wheel bases (not used in turnAngle calculation)
     
-    // Calculate wheel rotation needed for desired angle
+    // Calculate wheel rotation needed for desired angle 
     float fractionOfFullRotation = deg / 360.0;
     
     // Calculate required encoder counts
@@ -175,19 +198,26 @@ void turnAngle(float deg) {
         digitalWrite(in3, LOW);
         digitalWrite(in4, HIGH);
     }
-
+	
+	// Better imeplemented logic in reaching the targetEncoderCount with use of initialCount
     while (abs(lodom.getCount() - initialCount) < targetEncoderCount) {
         analogWrite(enA, 200);
         analogWrite(enB, 200);
     }
+
+	// Reset motors
     drive(0);
     turn(0);
 }
 
-void finishProcedure() {
-  drive(0);
-  turn(0);
-  digitalWrite(led, HIGH);
-  while (1) {
-    }
+void finishProcedure() { 
+	// Stop all movements
+  	drive(0);
+  	turn(0);
+
+	// Light up finish-LED
+  	digitalWrite(led, HIGH);
+
+	// Infinite loop to stop all actions
+	while (1) {}
 }
