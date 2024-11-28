@@ -15,7 +15,7 @@ void updateIR() {
     irData.r2Value = digitalRead(rightIRSensor2);
     
     //serial.print lines for debugging
-    if (irData.l1Value == 1) {
+    /* if (irData.l1Value == 1) {
       Serial.println("Left scanned!");
     }
     if (irData.r1Value == 1) {
@@ -24,10 +24,11 @@ void updateIR() {
     if (irData.mValue == 1) {
       Serial.println("Middle scanned!");
     }
+	*/
 }
 
 /*
- * Identifies junctions based on IR sensor values.
+ * Identifies junctions based on IR sensor values. Not being utilized currently.
  */
 int identifyJunction() {
     int l1Value = irData.l1Value;

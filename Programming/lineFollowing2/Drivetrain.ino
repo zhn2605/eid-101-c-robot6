@@ -62,7 +62,12 @@ void turn(int turn_spd) {
 int sensorDrive() {
     int totalValue = 0;
     
-    // Conditionals to change turn
+    /*
+	By using 5 IR sensors, we have a brief understanding of how "off track" our robot is.
+	Using that information, we create different "Levels" of turning to steer the robot back on track.
+	With negatives indicating a left turn and positives indicating a right turn, we can assign values
+	that relates proportionally to how much force we should use into correcting the path of our robot.
+	*/
     if (irData.l2Value) {
         totalValue += -2;
     }
@@ -79,18 +84,19 @@ int sensorDrive() {
       totalValue += 2;  
     }
 
-    // Drive based on conditionals
+    // Robot stops when all five sensors hit white -> off the course completely or reached the end.
+	// Not finalized
     if (irData.mValue == 0 && irData.r1Value == 0 && irData.l1Value == 0 && irData.l2Value == 0 && irData.r2Value == 0) {
         drive(0);
         turn(0);  
         return 0;
     }
     
-
+	// Define different "correctional" movements depending on our "off track status".
     if (totalValue == 0) {
         drive(180);
     } else if (totalValue == -1) {
-        drive(50);
+        drive(50); // Used to turn in1 & in4 on HIGH, allowing us to drive forward.
         analogWrite(enA, 20);
         analogWrite(enB, 160);
     } else if (totalValue <= -2) {
@@ -117,8 +123,11 @@ void moveDistance(float meters) {
     int encoderCountPerRotation = 1920;
     int dir = (meters < 0 ? -1 : 1);
     int currEncoderCount = lodom.getCount();
+
+	// Formula to transform linear distance into encoder counts
     int targetEncoderCount = currEncoderCount + dir * (encoderCountPerRotation * (1000 / (80 * PI)));
-    if (meters > 0){
+    
+	if (meters > 0){ // Specify how currEncoerCount should compare to targetEncoderCount depending on direction
       digitalWrite(in1, HIGH);
       digitalWrite(in2, LOW);
       digitalWrite(in3, LOW);
@@ -140,8 +149,10 @@ void moveDistance(float meters) {
       }
       
     }
-   drive(0);
-   turn(0);
+
+	// Reset drive and turn (Stop all movements)
+   	drive(0);
+   	turn(0);
 }
 
 void turnAngle(float deg) {
@@ -175,19 +186,26 @@ void turnAngle(float deg) {
         digitalWrite(in3, LOW);
         digitalWrite(in4, HIGH);
     }
-
+	
+	// Better imeplemented logic in reaching the targetEncoderCount with use of initialCount
     while (abs(lodom.getCount() - initialCount) < targetEncoderCount) {
         analogWrite(enA, 200);
         analogWrite(enB, 200);
     }
+
+	// Reset motors
     drive(0);
     turn(0);
 }
 
-void finishProcedure() {
-  drive(0);
-  turn(0);
-  digitalWrite(led, HIGH);
-  while (1) {
-    }
+void finishProcedure() { 
+	// Stop all movements
+  	drive(0);
+  	turn(0);
+
+	// Light up finish-LED
+  	digitalWrite(led, HIGH);
+
+	// Infinite loop to stop all actions
+	while (1) {}
 }
