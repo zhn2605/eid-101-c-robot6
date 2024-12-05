@@ -69,7 +69,6 @@ int sensorDrive() {
     If totalValue is positive, the robot has to prioritize turning right to stay on the line
     **/
     
-<<<<<<< HEAD
     /*
 	By using 5 IR sensors, we have a brief understanding of how "off track" our robot is.
 	Using that information, we create different "Levels" of turning to steer the robot back on track.
@@ -77,10 +76,6 @@ int sensorDrive() {
 	that relates proportionally to how much force we should use into correcting the path of our robot.
 	*/
     if (irData.l2Value) {
-=======
-    //change the value of totalValue based on reading of the IR sensors
-    if (irData.l2Value) { //if the leftmost sensor detects the line, drastically lower totalValue
->>>>>>> 9e9c5dde9d67e54c3aa6d2d31c7e414156bedc73
         totalValue += -2;
     }
     if (irData.l1Value) { //if the first sensor to the left detects the line, slightly lower totalValue
