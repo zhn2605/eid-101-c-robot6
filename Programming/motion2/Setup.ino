@@ -1,4 +1,13 @@
-void setupComponents() {
+/*
+ * Setup.ino
+ * Group 6: Zihan Zhao, Bertrand Juan, Marco Chen
+ * This file contains functions that set up modes of the GPIO connections in the robot.
+ */
+
+ /*
+  * Initializes all GPIO pinMode connections in the robot.
+  */
+void setupMotorController() {
     // <<<<<<<<<<<<<<<<<<<<<<<  LEDS  >>>>>>>>>>>>>>>>>>>>>
     pinMode(led, OUTPUT);
   
@@ -7,11 +16,6 @@ void setupComponents() {
     pinMode(middleIRSensor, INPUT);
     pinMode(leftIRSensor1, INPUT);
     pinMode(rightIRSensor1, INPUT);
-
-    // IMU Sensor
-    Wire.begin();
-    IMU.begin(); // initialize the MPU6050
-    IMU.calibrate();
 
     // <<<<<<<<<<<<<<<<< Motor Controller >>>>>>>>>>>>>>>>>
     // Right Motor
@@ -28,3 +32,4 @@ void setupComponents() {
     pinMode(rightEncA, INPUT_PULLUP);
     pinMode(rightEncB, INPUT_PULLUP);
 }
+>>>>>>> 993e03ca53f80d3e30909c735584acc1e3eaf744

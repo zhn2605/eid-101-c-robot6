@@ -1,12 +1,35 @@
-// IR Sensor
+/*
+ * Sensors.ino
+ * Group 6: Zihan Zhao, Bertrand Juan, Marco Chen
+ * This file contains functions that get and process the signals of the robot's sensors.
+ */
+
+/*
+ * Updates all IR sensors using digitalRead.
+ */
 void updateIR() {
     irData.l2Value = digitalRead(leftIRSensor2);
     irData.l1Value = digitalRead(leftIRSensor1);
     irData.mValue = digitalRead(middleIRSensor);
     irData.r1Value = digitalRead(rightIRSensor1);
     irData.r2Value = digitalRead(rightIRSensor2);
+    
+    //serial.print lines for debugging
+    /* if (irData.l1Value == 1) {
+      Serial.println("Left scanned!");
+    }
+    if (irData.r1Value == 1) {
+      Serial.println("Right scanned!");
+    }
+    if (irData.mValue == 1) {
+      Serial.println("Middle scanned!");
+    }
+	*/
 }
 
+/*
+ * Identifies junctions based on IR sensor values. Not being utilized currently.
+ */
 int identifyJunction() {
     int l1Value = irData.l1Value;
     int l2Value = irData.l2Value;
@@ -37,5 +60,4 @@ int identifyJunction() {
     // Unidentified
     return 6;
 }
-
-// IMU Sensor
+>>>>>>> 993e03ca53f80d3e30909c735584acc1e3eaf744
