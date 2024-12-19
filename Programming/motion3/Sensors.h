@@ -1,9 +1,5 @@
-#ifndef SENSORS_H
-#define SENSORS_H
-
 #include <rcc.h>
 #include <Wire.h>
-
 MPU6050 imu;
 HC_SR04 ultrasonic;
 VL53L0X lidar;
@@ -59,5 +55,3 @@ private:
     // IR Sensor Port
     int leftIRSensor1, leftIRSensor2, rightIRSensor1, rightIRSensor2, middleIRSensor;
 };
-
-#endif

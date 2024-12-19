@@ -59,8 +59,8 @@ int PIDSensorDrive(float kp, float ki, float kd) {
     float driveSpeed = driveSpeedCalc(totalValue, kp, ki, kd);
 
     // Calculate motor speed for each wheel
-    int leftSpeed = constrain(BASE_SPEED + driveSpeed, 0, MAX_SPEED);
-    int rightSpeed = constrain(BASE_SPEED - driveSpeed, 0, MAX_SPEED);
+    int leftSpeed = constrain(BASE_SPEED - driveSpeed, 0, MAX_SPEED);
+    int rightSpeed = constrain(BASE_SPEED + driveSpeed, 0, MAX_SPEED);
 
     if (totalValue > 0) {
         // Turning right
@@ -85,6 +85,8 @@ int PIDSensorDrive(float kp, float ki, float kd) {
         drive(BASE_SPEED);
     }
 
+    Serial.print(leftSpeed);
+    Serial.print("     ");
     Serial.println(rightSpeed);
     
     return 1;
