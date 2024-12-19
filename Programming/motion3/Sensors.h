@@ -1,7 +1,8 @@
-#ifndef SENSOR_H
-#define SENSOR_H
+#ifndef SENSORS_H
+#define SENSORS_H
 
 #include <rcc.h>
+#include <Wire.h>
 
 MPU6050 imu;
 HC_SR04 ultrasonic;
@@ -28,7 +29,7 @@ struct SensorData {
     uint16_t lidar_dist = 0;
     
     // Ultra Sonic Sensor Data
-    float ultra_dist = 0;
+    float ultrasonic_dist = 0;
 };
 
 class Sensors {
@@ -38,12 +39,14 @@ public:
     float currentTime = 0;
     float theta = 0;
 
-    unsigned long duration_us
+    unsigned long duration_us;
 
     SensorData sensorData;
     // Default no param constructor to store the class object in main code
     Sensors();
 
+    // Set pins for IR Sensors
+    void set_IR(int lIR2, int lIR1, int mIR, int rIR1, int rIR2);
 
     // Updates all Inecessary sensor data
     void updateIR();
@@ -51,7 +54,7 @@ public:
     void updateLidar();
     void updateUltrasonic();
 
-    int identifyJunction()
+    int identifyJunction();
 private:
     // IR Sensor Port
     int leftIRSensor1, leftIRSensor2, rightIRSensor1, rightIRSensor2, middleIRSensor;

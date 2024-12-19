@@ -4,7 +4,7 @@ Sensors::Sensors() {
 
 }
 
-void Sensors::set_IR(lIR2, lIR1, mIR, rIR1, rIR2) {
+void Sensors::set_IR(int lIR2, int lIR1, int mIR, int rIR1, int rIR2) {
     leftIRSensor2 = lIR2;
     leftIRSensor1 = lIR1;
     middleIRSensor = mIR;
@@ -91,5 +91,5 @@ void Sensors::updateLidar() {
 void Sensors::updateUltrasonic() {
     duration_us = ultrasonic.pulse();
 
-    ultrasonic.dist = duration2centimeters(duration_us);
+    sensorData.ultrasonic_dist = duration2centimeters(duration_us);
 }

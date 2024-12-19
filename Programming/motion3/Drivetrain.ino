@@ -64,24 +64,25 @@ int sensorDrive() {
     int totalValue = 0;
     
     // Conditionals to change turn
-    if (irData.l2Value) {
+    if (sensors.sensorData.l2Value) {
         totalValue += -2;
     }
-    if (irData.l1Value) {
+    if (sensors.sensorData.l1Value) {
         totalValue += -1;
     }
-    if (irData.mValue) {
+    if (sensors.sensorData.mValue) {
         totalValue += 0;
     }
-    if (irData.r1Value) {
+    if (sensors.sensorData.r1Value) {
         totalValue += 1;
     }
-    if (irData.r2Value) {
+    if (sensors.sensorData.r2Value) {
       totalValue += 2;  
     }
 
     // Drive based on conditionals
-    if (irData.mValue == 0 && irData.r1Value == 0 && irData.l1Value == 0 && irData.l2Value == 0 && irData.r2Value == 0) {
+    if (sensors.sensorData.mValue == 0 && sensors.sensorData.r1Value == 0 
+    && sensors.sensorData.l1Value == 0 && sensors.sensorData.l2Value == 0 && sensors.sensorData.r2Value == 0) {
         drive(0);
         turn(0);  
         return 0;
@@ -148,14 +149,14 @@ void moveDistance(float meters) {
 
 // turns to approach "deg" relative to where the robot started
 void turnAngle(float deg) {
-    updateIMU(); // update IMU readings
+    sensors.updateIMU(); // update IMU readings
     // turn left if angle is not yet reached (tolerance of 1 degree)
-    if(imuData.theta < deg - 1)
+    if(sensors.sensorData.theta < deg - 1)
     {
       turn(-130);
     }
     // turn right if angle is slightly overshot (tolerance of 1 degree)
-    else if (imuData.theta > deg + 1) 
+    else if (sensors.sensorData.theta > deg + 1) 
     {
       turn(130);
     }
