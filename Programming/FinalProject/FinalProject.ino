@@ -19,6 +19,7 @@ int leftIRSensor2 = 26, leftIRSensor1 = 25, middleIRSensor = 24, rightIRSensor1 
 int in1 = 6, in2 = 7, in3 = 8, in4 = 11;
 int enA = 5, enB = 9;
 int leftEncA = 3, leftEncB = 4, rightEncA = 2, rightEncB = 12;
+int clawLift = 11;
 
 // <<<<<<<<<<<<<<<<<< Gloabl Values >>>>>>>>>>>>>>>>>>>
 // Structs
@@ -47,6 +48,8 @@ void drive(int move_spd);
 void turn(int turn_spd);
 int sensorDrive();
 
+int junctionCount = 0;
+
 void setup() {
   setupMotorController();
   Serial.begin(115200);
@@ -56,16 +59,58 @@ void loop() {
   // Driving loop
   int driving = 1;
 
+  // Track specific
+  // Track A
+  int maxJunctions = 3;
+
   float Kp = 20;
   float Ki = .01;
   float Kd = 20 ;
+
+  int state = 1; // driving state
   
-  while (driving) {
+  while (state > 0) {
     // Updating necessary sensors
-    updateIR();
     int junction = identifyJunction();
-    driving = PIDSensorDrive(Kp, Ki, Kd);
+    
+    updateIR();
+    if (state == 1) {
+      state = PIDSensorDrive(Kp, Ki, Kd); 
+    } 
+    
+    else if (state == 2) {
+        updateIR();
+        junction = identifyJunction();
+      
+        // Junction type 1: Full white
+        if (junction == 5) {
+            moveDistance(-.0300);
+            updateIR();
+            junction = identifyJunction();
+
+            if (junction == 4) {
+                state = 0;  
+            } else {
+                turnAngle(180);  
+            }
+        } else if (junction != 5){
+            moveDistance(.0257);  
+            updateIR();
+            junction=identifyJunction();
+
+            if (junction != 5) {
+                moveDistance(-.0300);
+                turnAngle(-90);
+            }
+        }
+        state = 1;
+    }
   }
+  
+  // analogWrite(clawLift, 180);
+  // delay(1000);
+  
+  // analogWrite(clawLift, 0);
 
   finishProcedure();
 }

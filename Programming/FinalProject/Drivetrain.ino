@@ -140,8 +140,8 @@ void moveDistance(float meters) {
       digitalWrite(in3, LOW);
       digitalWrite(in4, HIGH);
       while (currEncoderCount < targetEncoderCount) {
-        analogWrite(enA, 250);
-        analogWrite(enB, 250);
+        analogWrite(enA, 150);
+        analogWrite(enB, 150);
         currEncoderCount = lodom.getCount();
       }
     } else if (meters < 0) {
@@ -150,8 +150,8 @@ void moveDistance(float meters) {
       digitalWrite(in4, LOW);
       digitalWrite(in3, HIGH);
       while (currEncoderCount > targetEncoderCount) {
-        analogWrite(enA, 250);
-        analogWrite(enB, 250);
+        analogWrite(enA, 150);
+        analogWrite(enB, 150);
         currEncoderCount = lodom.getCount();
       }
       

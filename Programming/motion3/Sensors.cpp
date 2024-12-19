@@ -84,10 +84,12 @@ void Sensors::updateIMU() {
   sensorData.theta = sensorData.theta + ((sensorData.ang_vel_z) * (dt));
 }
 
+// Function to update lidar
 void Sensors::updateLidar() {
     sensorData.lidar_dist = getFastReading(&lidar);
 }
 
+// Function to update ultrasonic distance
 void Sensors::updateUltrasonic() {
     duration_us = ultrasonic.pulse();
 

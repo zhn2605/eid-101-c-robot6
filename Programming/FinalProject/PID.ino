@@ -52,15 +52,22 @@ int PIDSensorDrive(float kp, float ki, float kd) {
     if (irData.mValue == 0 && irData.r1Value == 0 && irData.l1Value == 0 && irData.l2Value == 0 && irData.r2Value == 0) {
         drive(0);
         turn(0);  
-        return 0;
+        return 2; // change from 0 to 2
+    }
+
+    // Identify cross-stop
+    if (irData.mValue && irData.r1Value && irData.l1Value && irData.l2Value && irData.r2Value) {
+        drive(0);
+        turn(0); 
+        return 2;
     }
 
     // Calculate motor speed
     float driveSpeed = driveSpeedCalc(totalValue, kp, ki, kd);
 
     // Calculate motor speed for each wheel
-    int leftSpeed = constrain(BASE_SPEED - driveSpeed, 0, MAX_SPEED);
-    int rightSpeed = constrain(BASE_SPEED + driveSpeed, 0, MAX_SPEED);
+    int leftSpeed = constrain(BASE_SPEED + driveSpeed, 0, MAX_SPEED);
+    int rightSpeed = constrain(BASE_SPEED - driveSpeed, 0, MAX_SPEED);
 
     if (totalValue > 0) {
         // Turning right

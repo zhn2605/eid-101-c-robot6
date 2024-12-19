@@ -8,7 +8,7 @@
  * Updates all IR sensors using digitalRead.
  */
 void updateIR() {
-    irData.l2Value = digitalRead(leftIRSensor2);
+    irData.l2Value = digitalRead(leftIRSensor2);  
     irData.l1Value = digitalRead(leftIRSensor1);
     irData.mValue = digitalRead(middleIRSensor);
     irData.r1Value = digitalRead(rightIRSensor1);

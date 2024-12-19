@@ -31,4 +31,7 @@ void setupMotorController() {
     pinMode(enB, OUTPUT);
     pinMode(rightEncA, INPUT_PULLUP);
     pinMode(rightEncB, INPUT_PULLUP);
+
+    // Claw
+    pinMode(clawLift, OUTPUT);
 }
